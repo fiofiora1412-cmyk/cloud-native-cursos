@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: ${ORACLE_URL}
+    username: ${ORACLE_USERNAME}
+    password: ${ORACLE_PASSWORD}
+    driver-class-name: oracle.jdbc.OracleDriver
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://bastiancloudnative1.b2clogin.com/d84f797a-7438-4aba-a2e4-6d9a89a1d058/v2.0/
+          jwk-set-uri: https://bastiancloudnative1.b2clogin.com/bastiancloudnative1.onmicrosoft.com/discovery/v2.0/keys?p=b2c_1_signin_signup
+
+app:
+  security:
+    audience: https://bastiancloudnative1.onmicrosoft.com/a8398803-70d3-4643-b77e-b05e57557aef

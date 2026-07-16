@@ -1,0 +1,30 @@
+# Maven
+**/target/
+.mvn/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Oracle Wallet
+wallet/
+*.sso
+*.p12
+*.jks
+cwallet.sso
+ewallet.p12
+keystore.jks
+truststore.jks
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

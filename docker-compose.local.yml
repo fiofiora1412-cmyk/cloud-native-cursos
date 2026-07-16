@@ -1,0 +1,70 @@
+services:
+  rabbitmq:
+    build:
+      context: ./rabbitmq
+    container_name: rabbitmq-cloudnative-local
+    restart: unless-stopped
+    hostname: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USERNAME:-admin}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-admin123}
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data_local:/var/lib/rabbitmq
+    networks:
+      - cloudnative-net
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  producer-service:
+    build:
+      context: ./producer-service
+    container_name: producer-service-local
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      SERVER_PORT: 8081
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USERNAME: ${RABBITMQ_USERNAME:-admin}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD:-admin123}
+      AZURE_B2C_ISSUER_URI: ${AZURE_B2C_ISSUER_URI}
+      AZURE_B2C_JWK_SET_URI: ${AZURE_B2C_JWK_SET_URI}
+      AZURE_B2C_AUDIENCE: ${AZURE_B2C_AUDIENCE}
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - cloudnative-net
+
+  consumer-service:
+    build:
+      context: ./consumer-service
+    container_name: consumer-service-local
+    restart: unless-stopped
+    ports:
+      - "8082:8082"
+    environment:
+      SERVER_PORT: 8082
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USERNAME: ${RABBITMQ_USERNAME:-admin}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD:-admin123}
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - cloudnative-net
+
+volumes:
+  rabbitmq_data_local:
+
+networks:
+  cloudnative-net:
+    driver: bridge
