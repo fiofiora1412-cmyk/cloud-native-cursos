@@ -1,40 +1,63 @@
 services:
   producer-service:
-    image: producer-service:latest
+    image: ${DOCKERHUB_USERNAME}/producer-service:${IMAGE_TAG}
     container_name: producer-service
     restart: unless-stopped
     ports:
       - "8081:8081"
+
     environment:
       SERVER_PORT: 8081
+
+      ORACLE_URL: ${ORACLE_URL}
+      ORACLE_USERNAME: ${ORACLE_USERNAME}
+      ORACLE_PASSWORD: ${ORACLE_PASSWORD}
+
       RABBITMQ_HOST: rabbitmq
       RABBITMQ_PORT: 5672
       RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
       RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+
       AZURE_B2C_ISSUER_URI: ${AZURE_B2C_ISSUER_URI}
       AZURE_B2C_JWK_SET_URI: ${AZURE_B2C_JWK_SET_URI}
       AZURE_B2C_AUDIENCE: ${AZURE_B2C_AUDIENCE}
+
     networks:
       - cloudnative-net
+
     volumes:
-      - C:/Oracle/Wallet:/oracle/wallet:ro
+      - /home/ec2-user/oracle/wallet:/oracle/wallet:ro
+    
 
   consumer-service:
-    image: consumer-service:latest
+    image: ${DOCKERHUB_USERNAME}/consumer-service:${IMAGE_TAG}
     container_name: consumer-service
     restart: unless-stopped
     ports:
       - "8082:8082"
+
     environment:
       SERVER_PORT: 8082
+
+      ORACLE_URL: ${ORACLE_URL}
+      ORACLE_USERNAME: ${ORACLE_USERNAME}
+      ORACLE_PASSWORD: ${ORACLE_PASSWORD}
+
       RABBITMQ_HOST: rabbitmq
       RABBITMQ_PORT: 5672
       RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
       RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_SESSION_TOKEN: ${AWS_SESSION_TOKEN}
+      AWS_S3_BUCKET: ${AWS_S3_BUCKET}
+
     networks:
       - cloudnative-net
+
     volumes:
-      - C:/Oracle/Wallet:/oracle/wallet:ro
+      - /home/ec2-user/oracle/wallet:/oracle/wallet:ro
 
 networks:
   cloudnative-net:
