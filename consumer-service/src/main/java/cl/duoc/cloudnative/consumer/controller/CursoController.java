@@ -62,7 +62,7 @@ public class CursoController {
         return cursoConsumerService.obtenerPorInstructorYFecha(
                 instructor,
                 fechaInicio
-        );
+         );
     }
 
     @PutMapping("/{id}")
