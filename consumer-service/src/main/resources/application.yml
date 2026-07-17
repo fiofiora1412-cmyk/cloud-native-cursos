@@ -31,6 +31,13 @@ spring:
           multiplier: 2
           max-interval: 10s
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://bastiancloudnative1.b2clogin.com/d84f797a-7438-4aba-a2e4-6d9a89a1d058/v2.0/
+          jwk-set-uri: https://bastiancloudnative1.b2clogin.com/bastiancloudnative1.onmicrosoft.com/discovery/v2.0/keys?p=b2c_1_signin_signup
+
 server:
   port: ${SERVER_PORT:8082}
 
@@ -69,3 +76,4 @@ aws:
 logging:
   level:
     org.springframework.security: TRACE
+    org.springframework.security.oauth2: TRACE
