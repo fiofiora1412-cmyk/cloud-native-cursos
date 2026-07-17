@@ -64,7 +64,7 @@ public class CursoController {
                 fechaInicio
          );
     }
-
+/*ghj*/
     @PutMapping("/{id}")
     public Curso actualizarCurso(
 
