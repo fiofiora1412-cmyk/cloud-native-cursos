@@ -31,7 +31,7 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/actuator/health").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/pedidos").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/cursos").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(
@@ -46,7 +46,7 @@ public class SecurityConfig {
 
         Converter<Jwt, Collection<GrantedAuthority>> authoritiesConverter = jwt -> {
             Set<GrantedAuthority> authorities = new HashSet<>(defaultScopesConverter.convert(jwt));
-            addClaimAuthorities(jwt.getClaim("extension_role"), authorities);
+            addClaimAuthorities(jwt.getClaim("extension_ConsultaRole"), authorities);
             addClaimAuthorities(jwt.getClaim("role"), authorities);
             addClaimAuthorities(jwt.getClaim("roles"), authorities);
             return authorities;
